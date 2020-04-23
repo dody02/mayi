@@ -55,7 +55,7 @@ public class HazelcastClusterCreater {
 				user = config.getCm().getAdvance().getH2user();
 				password = config.getCm().getAdvance().getH2password();
 			}
-			DataBase db = DataBase.getInstance(dir, user, password);
+			DataBase db = DataBase.getInstance(config.getCm().getName(),dir, user, password);
 			result = new HazelcastMasterSlaveCluster(cfg,db);
 			log.info("create HazelcastMasterSlaveCluster by :"+JSONObject.toJSONString(cfg));
 		} else {

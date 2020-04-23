@@ -5,6 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.slf4j.Logger;
@@ -27,11 +29,41 @@ public final class DataBase {
 	
 	private static DataBase instance = null;
 	
-	public static synchronized DataBase getInstance(String dir,String user,String password) {
-			if ( instance == null)
-				instance = new DataBase(dir,user,password);
-		return instance;
+	private static ConcurrentMap<String , DataBase> instances = new ConcurrentHashMap<String ,DataBase>();
+	
+	public static synchronized DataBase getInstance(String clusterData,String dir,String user,String password) {
+			if ( !instances.containsKey(clusterData)) {
+				
+				instances.put(clusterData, new DataBase(dir,user,password));
+			} 
+		return  instances.get(clusterData);
 	}
+	
+	/**
+	 * 建立数据库
+	 * @param dir
+	 * @param port
+	 * @param user
+	 * @param password
+	 */
+	public DataBase(String clusterData , String dir,String user,String password) {
+		
+		if (dir !=null) {
+			this.basedir = dir;
+		}
+		if (user !=null ) {
+			this.dbUser = user;
+		}
+		if (password != null) {
+			this.dbPasswd = password;
+		}
+		if (clusterData != null) {
+			this.clusterData = clusterData;
+		}
+
+		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
+	}
+	
 
 	/**
 	 * 建立数据库
