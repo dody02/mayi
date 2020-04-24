@@ -39,7 +39,7 @@ public class HazelcastClusterMemberLisenter implements MembershipListener{
 			log.debug("get ");
 			IMap<String, String> map = hz.getMap(HazelcastMasterSlaveCluster.ACTIVE_MEMBER);
 			if (map.isEmpty()) { //当前没有活动主节点
-				log.info("current Cluster is no active member, active current member ");
+				log.debug("current Cluster is no active member, active current member ");
 				map.put(HazelcastMasterSlaveCluster.ACTIVE_MEMBER, hz.getCluster().getLocalMember().getAddress().getHost()); //让当前节点作为主服务
 			}
 			

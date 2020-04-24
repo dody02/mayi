@@ -76,7 +76,7 @@ public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster {
 		} finally {
 			
 		}
-		log.info("cureent active member is : "+active);
+		log.debug("cureent active member is : "+active);
 		return active;
 	}
 	

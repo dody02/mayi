@@ -34,7 +34,7 @@ public final class DataBase {
 	public static synchronized DataBase getInstance(String clusterData,String dir,String user,String password) {
 			if ( !instances.containsKey(clusterData)) {
 				
-				instances.put(clusterData, new DataBase(dir,user,password));
+				instances.put(clusterData, new DataBase(clusterData,dir,user,password));
 			} 
 		return  instances.get(clusterData);
 	}
@@ -65,25 +65,25 @@ public final class DataBase {
 	}
 	
 
-	/**
-	 * 建立数据库
-	 * @param dir
-	 * @param port
-	 * @param user
-	 * @param password
-	 */
-	private DataBase(String dir,String user,String password) {
-		if (dir !=null) {
-			this.basedir = dir;
-		}
-		if (user !=null ) {
-			this.dbUser = user;
-		}
-		if (password != null) {
-			this.dbPasswd = password;
-		}
-		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
-	}
+//	/**
+//	 * 建立数据库
+//	 * @param dir
+//	 * @param port
+//	 * @param user
+//	 * @param password
+//	 */
+//	private DataBase(String dir,String user,String password) {
+//		if (dir !=null) {
+//			this.basedir = dir;
+//		}
+//		if (user !=null ) {
+//			this.dbUser = user;
+//		}
+//		if (password != null) {
+//			this.dbPasswd = password;
+//		}
+//		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
+//	}
 	
 	
 	private JdbcConnectionPool pool;
