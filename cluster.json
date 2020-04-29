@@ -3,7 +3,7 @@
 	"name": "cluster",
 	
 	"?port":"设置本机使用的端口号，可以为空，不设置时将自动使用一个空闲端口",
-	"port":5701,
+	"port":57014,
 	
 	"?isMasterSalve":"是否为主从模式",
 	"isMasterSalve":true,
@@ -29,6 +29,25 @@
 		"h2password":"root",
 		"timeout":1000,
 		"size":10000
+	},
+	
+	"?persistent":"持久化设置，如果为空则不作持久化",
+	"persistent":{
+		"?url":"如果是redis的话，则以‘redis://’开头 redis://hostname:port/db",
+		"url":"jdbc:mysql://localhost:3307/clusterpersistent?useSSL=false&serverTimezone=UTC",
+		"user":"root",
+		"passwd":"root",
+		"?say":"以下参数不是必须的。 ",
+		"?classdriver":"jdbc类名",
+		"classdriver":"com.mysql.jdbc.Driver",
+		"?poolsize":"连接池大小，默认为20 ",
+		"poolsize":20,
+		"?idle":"空闲链接数，默认为2",
+		"idle": 2,
+		"?timeout":"超时时间",
+		"timeout": 10000,
+		"?autoCommit":"自动提交，默认自动提交",
+		"autoCommit":true
 	}
 
 }
