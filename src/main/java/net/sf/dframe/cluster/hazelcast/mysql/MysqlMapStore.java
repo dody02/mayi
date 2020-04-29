@@ -1,4 +1,4 @@
-package net.sf.dframe.cluster.hazelcast.h2;
+package net.sf.dframe.cluster.hazelcast.mysql;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,13 +18,13 @@ import com.hazelcast.map.MapStore;
  * @author dy02
  *
  */
-public class H2MapStore implements MapStore<String, String>  {
+public class MysqlMapStore implements MapStore<String, String>  {
 
-	private static Logger log = LoggerFactory.getLogger(H2MapStore.class);
+	private static Logger log = LoggerFactory.getLogger(MysqlMapStore.class);
 	
-	private DataBase db;
+	private MysqlDataBase db;
 	
-	private String TableName = "H2MAP";
+	private String TableName = "MYSQL_MAP";
 	
 	private List<String> columns ;
 	
@@ -32,7 +32,7 @@ public class H2MapStore implements MapStore<String, String>  {
 	private final String KEY_LABEL = "STRING_KEY";
 	
 	
-	public H2MapStore (DataBase db) {
+	public MysqlMapStore (MysqlDataBase db) {
 		this(db,null);
 	}
 	
@@ -41,13 +41,13 @@ public class H2MapStore implements MapStore<String, String>  {
 	 * @param db
 	 * @param name
 	 */
-	public H2MapStore (DataBase db,String name) {
+	public MysqlMapStore (MysqlDataBase db,String name) {
 		this.db = db;
 		initTable(db, name);
 		
 	}
 
-	private void initTable(DataBase db, String name) {
+	private void initTable(MysqlDataBase db, String name) {
 		if (name!=null && !name.isEmpty()) {
 			this.TableName = this.TableName+"_"+name;
 		}
@@ -108,9 +108,12 @@ public class H2MapStore implements MapStore<String, String>  {
 	@Override
 	public void store(String key, String value) {
 		try {
-			db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ('"+key+"','"+value+"');");
+			String sql = "replace INTO "+this.TableName+" ("+KEY_LABEL+","+VALUE_LABEL+") VALUES ('"+key+"','"+value+"');";
+			log.debug(sql);
+			db.executeSql(sql);
+//			db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ('"+key+"','"+value+"');");
 		} catch (Exception e) {
-			log.error("save h2 exception",e);
+			log.error("save mysql exception",e);
 		}
 	}
 
@@ -118,9 +121,10 @@ public class H2MapStore implements MapStore<String, String>  {
 	public void storeAll(Map<String, String> map) {
 		for ( String key : map.keySet()) {
 			try {
-				db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ('"+key+"','"+map.get(key)+"');");
+				db.executeSql("replace INTO "+this.TableName+" ("+KEY_LABEL+","+VALUE_LABEL+") VALUES ('"+key+"','"+map.get(key)+"');");
+//				db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ('"+key+"','"+map.get(key)+"');");
 			} catch (Exception e) {
-				log.error("batch save h2 exception",e);
+				log.error("batch save mysql exception",e);
 			}
 		}
 	}
@@ -130,7 +134,7 @@ public class H2MapStore implements MapStore<String, String>  {
 		try {
 			db.executeSql("DELETE FROM "+this.TableName+" WHERE "+KEY_LABEL+" = '"+key+"';");
 		} catch (Exception e) {
-			log.error("delete h2 exception",e);
+			log.error("delete mysql exception",e);
 		}
 	}
 
@@ -140,7 +144,7 @@ public class H2MapStore implements MapStore<String, String>  {
 			for (String key: keys)
 				delete(key);
 		} catch (Exception e) {
-			log.error("delete all h2 exception",e);
+			log.error("delete all mysql exception",e);
 		}
 	}
 

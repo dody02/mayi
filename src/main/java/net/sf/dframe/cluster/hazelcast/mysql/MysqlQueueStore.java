@@ -1,4 +1,4 @@
-package net.sf.dframe.cluster.hazelcast.h2;
+package net.sf.dframe.cluster.hazelcast.mysql;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -19,14 +19,14 @@ import com.hazelcast.collection.QueueStore;
  * @author dy02
  *
  */
-public class H2QueueStore implements QueueStore<String>{
+public class MysqlQueueStore implements QueueStore<String>{
 
 	
-	private static Logger log = LoggerFactory.getLogger(H2QueueStore.class);
+	private static Logger log = LoggerFactory.getLogger(MysqlQueueStore.class);
 	
-	private DataBase db;
+	private MysqlDataBase db;
 	
-	private String TableName = "H2QUEUE";
+	private String TableName = "MYSQL_QUEUE";
 	
 	private List<String> columns ;
 	
@@ -38,60 +38,64 @@ public class H2QueueStore implements QueueStore<String>{
 	 * @param db
 	 * @param name
 	 */
-	public H2QueueStore (DataBase db,String name) {
+	public MysqlQueueStore (MysqlDataBase db,String name) {
 		this.db = db;
 		initTable(db, name);
 		
 	}
 
-	private void initTable(DataBase db, String name) {
+	private void initTable(MysqlDataBase db, String name) {
 		String initSql = null;
 		if (name!=null && !name.isEmpty()) {
 			this.TableName = this.TableName+"_"+name;
 		}
-		initSql = "CREATE TABLE IF NOT EXISTS  "+TableName+" ("+KEY_LABEL+" BIGINT PRIMARY KEY ,"+VALUE_LABEL+" VARCHAR(1000))";
-		
+		initSql = "CREATE TABLE IF NOT EXISTS  "+TableName+" ("+KEY_LABEL+" BIGINT PRIMARY KEY AUTO_INCREMENT,"+VALUE_LABEL+" VARCHAR(1000))";
 		columns = new ArrayList<String>();
 		columns.add(KEY_LABEL);
 		columns.add(VALUE_LABEL);
 		try {
 			db.executeSql(initSql);
 		} catch (Exception e) {
-			log.error("create Queue Store Table Exception");
+			log.error("create Queue Store Table Exception,sql:"+initSql,e);
 		}
 	}
 	
-	public H2QueueStore (DataBase db) {
+	public MysqlQueueStore (MysqlDataBase db) {
 		//
 		this (db,null);
 	}
 	
 	@Override
 	public void store(Long key, String value) {
+		String sql = "replace INTO "+this.TableName+" ("+KEY_LABEL+","+VALUE_LABEL+") VALUES ("+key+",'"+value+"');";
 		try {
-			db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ("+key+",'"+value+"');");
+			db.executeSql(sql);
+//			db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ("+key+",'"+value+"');");
 		} catch (Exception e) {
-			log.error("save h2 exception",e);
+			log.error("save mysql exception,sql:"+sql,e);
 		}
 	}
 
 	@Override
 	public void storeAll(Map<Long, String> map) {
 		for ( Long key : map.keySet()) {
+			String sql = "replace INTO "+this.TableName+" ("+KEY_LABEL+","+VALUE_LABEL+") VALUES ("+key+",'"+map.get(key)+"');";
 			try {
-				db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ("+key+",'"+map.get(key)+"');");
+				db.executeSql(sql);
+//				db.executeSql("MERGE INTO "+this.TableName+" KEY ("+KEY_LABEL+") VALUES ("+key+",'"+map.get(key)+"');");
 			} catch (Exception e) {
-				log.error("batch save h2 exception",e);
+				log.error("batch save mysql exception,sql"+sql,e);
 			}
 		}
 	}
 
 	@Override
 	public void delete(Long key) {
+		String sql = "DELETE FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";";
 		try {
-			db.executeSql("DELETE FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";");
+			db.executeSql(sql);
 		} catch (Exception e) {
-			log.error("delete h2 exception",e);
+			log.error("delete mysql exception,sql:"+sql,e);
 		}
 	}
 
@@ -110,8 +114,9 @@ public class H2QueueStore implements QueueStore<String>{
 	public String load(Long key) {
 		String value = null;
 		JSONArray result;
+		String sql = "SELECT * FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";";
 		try {
-			result = db.query("SELECT * FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";",columns);
+			result = db.query(sql,columns);
 			if (!result.isEmpty()) {
 				value = result.getJSONObject(0).getString(VALUE_LABEL);
 			}
@@ -129,8 +134,9 @@ public class H2QueueStore implements QueueStore<String>{
 			JSONArray result = null;
 			String value = null;
 //			result = db.query("SELECT * FROM "+this.TableName,columns);
+			String sql = "SELECT * FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";";
 			try {
-				result = db.query("SELECT * FROM "+this.TableName+" WHERE "+KEY_LABEL+" = "+key+";",columns);
+				result = db.query(sql,columns);
 				if (!result.isEmpty()) {
 					value = result.getJSONObject(0).getString(VALUE_LABEL);
 				}				

@@ -18,9 +18,12 @@ import com.hazelcast.map.IMap;
 import com.hazelcast.map.MapStore;
 import com.hazelcast.map.listener.MapListener;
 
+import net.sf.dframe.cluster.IPersistent;
+import net.sf.dframe.cluster.IPersistentCluster;
 import net.sf.dframe.cluster.hazelcast.h2.ArributesMapH2Store;
 import net.sf.dframe.cluster.hazelcast.h2.DataBase;
 import net.sf.dframe.cluster.hazelcast.h2.H2MapStore;
+import net.sf.dframe.cluster.hazelcast.h2.H2Persistent;
 import net.sf.dframe.cluster.hazelcast.h2.H2QueueStore;
 
 /**
@@ -28,26 +31,36 @@ import net.sf.dframe.cluster.hazelcast.h2.H2QueueStore;
  * @author dy02
  *
  */
-public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster {
+public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster implements IPersistentCluster {
 
 	private static Logger log = LoggerFactory.getLogger(HazelcastMasterSlaveCluster.class);
 	
 	public static final  String ACTIVE_MEMBER = "ACTIVE";
 	
-	private static final  String ARRIBUTIES  = "ARRIBUTIES";
+//	private static final  String ARRIBUTIES  = "ARRIBUTIES";
 	private static final  String ARRIBUTIES_PERSISTENCE  = "ARRIBUTIES_PERSISTENCE";
 	
 	private DataBase db = null;
+	
+	private IPersistent persistent;
 	
 	
 	public HazelcastMasterSlaveCluster(Config cfg,DataBase db) {
 		super(cfg);
 		this.db = db;
+		this.persistent = new H2Persistent(db);
 		MembershipListener listener = new HazelcastClusterMemberLisenter(hz);
 		hz.getCluster().addMembershipListener(listener );
 		
 	}
 	
+	public HazelcastMasterSlaveCluster(Config cfg,DataBase db , IPersistent persistent) {
+		super(cfg);
+		this.db = db;
+		MembershipListener listener = new HazelcastClusterMemberLisenter(hz);
+		hz.getCluster().addMembershipListener(listener );
+		this.persistent = persistent;
+	}
 	
 	/**
 	 * current member is active one
@@ -215,4 +228,46 @@ public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster {
 		super.shutdown();
 		db.close();
 	}
+
+
+	@Override
+	public IQueue<?> getPersistentQueue(String name) {
+		QueueConfig queueConfig = hz.getConfig().getQueueConfig(name);
+		QueueStore<?> storeImplementation = getPersistent().getQueueStore(name);
+		QueueStoreConfig queueStoreConfig = new QueueStoreConfig();
+		queueStoreConfig.setEnabled(true);
+		queueStoreConfig.setProperty("binary", "false");
+		queueStoreConfig.setProperty("memory-limit", "0");
+		queueStoreConfig.setProperty("bulk-load", "4");
+		queueStoreConfig.setStoreImplementation(storeImplementation);
+		queueConfig.setQueueStoreConfig(queueStoreConfig);
+		return hz.getQueue(name);
+	}
+
+
+	@Override
+	public IMap<?, ?> getPersistentMap(String name) {
+		MapStoreConfig mapStoreConfig = new MapStoreConfig();
+		mapStoreConfig.setEnabled(true);
+		mapStoreConfig.setWriteDelaySeconds(0);
+		MapStore<?, ?>  store = getPersistent().getMapStore(name);
+		mapStoreConfig.setImplementation(store);
+		hz.getConfig().getMapConfig(name).setMapStoreConfig(mapStoreConfig);
+		
+		IMap<?, ?>  map =  hz.getMap(name);
+		
+		return map;
+	}
+
+
+	@Override
+	public IPersistent getPersistent() {
+		return persistent;
+	}
+
+	public void setPersistent(IPersistent persistnet) {
+		this.persistent = persistnet;
+	}
+
+	
 }

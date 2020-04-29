@@ -6,6 +6,11 @@ import com.hazelcast.core.HazelcastInstance;
 
 import net.sf.dframe.cluster.ICluster;
 
+/**
+ * 
+ * @author dy02
+ *
+ */
 public class HazelcastShardingCluster implements  ICluster {
 
 	protected HazelcastInstance hz;

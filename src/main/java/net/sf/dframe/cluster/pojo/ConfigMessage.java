@@ -20,6 +20,8 @@ public class ConfigMessage {
 	private List<String> members;
 	
 	private Advance advance;
+	
+	private Persistent persistent;
 
 	public String getName() {
 		return name;
@@ -68,4 +70,13 @@ public class ConfigMessage {
 	public void setAdvance(Advance advance) {
 		this.advance = advance;
 	}
+
+	public Persistent getPersistent() {
+		return persistent;
+	}
+
+	public void setPersistent(Persistent persistent) {
+		this.persistent = persistent;
+	}
+	
 }

@@ -1,4 +1,4 @@
-package net.sf.dframe.cluster.hazelcast.h2;
+package net.sf.dframe.cluster.hazelcast.mysql;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,50 +8,36 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.h2.jdbcx.JdbcConnectionPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import net.sf.dframe.cluster.DataBasePool;
 import net.sf.dframe.cluster.pojo.Persistent;
+/**
+ * mysql 数据库
+ * @author Dody
+ *
+ */
+public final class MysqlDataBase {
 
-public final class DataBase {
-
-	private static Logger log = LoggerFactory.getLogger(DataBase.class);
+	private static Logger log = LoggerFactory.getLogger(MysqlDataBase.class);
 	
+		
+	private static ConcurrentMap<String , MysqlDataBase> instances = new ConcurrentHashMap<String ,MysqlDataBase>();
 	
-	private String basedir = "./";
-
-	private String clusterData = "cluster";
-	private String dbUser = "root";
-	private String dbPasswd = "root";
-
+	private DataBasePool dbo = null;
 	
-	private static DataBase instance = null;
-	
-	private static ConcurrentMap<String , DataBase> instances = new ConcurrentHashMap<String ,DataBase>();
-	
-	public static synchronized DataBase getInstance(String clusterData,String dir,String user,String password) {
+	public static synchronized MysqlDataBase getInstance(String clusterData,Persistent persistent) {
 			if ( !instances.containsKey(clusterData)) {
 				
-				instances.put(clusterData, new DataBase(clusterData,dir,user,password));
+				instances.put(clusterData, new MysqlDataBase(persistent));
 			} 
 		return  instances.get(clusterData);
 	}
 	
-	
-	public static synchronized DataBase getInstance(String name, Persistent persistentConfig) {
-		if ( !instances.containsKey(name)) {
-			
-			instances.put(name, new DataBase(name, persistentConfig));
-		} 
-	return  instances.get(name);
-	}
-	
-	
-	
 	/**
 	 * 建立数据库
 	 * @param dir
@@ -59,69 +45,12 @@ public final class DataBase {
 	 * @param user
 	 * @param password
 	 */
-	public DataBase(String clusterData , Persistent persistentConfig) {
+	public MysqlDataBase(Persistent persistent) {
 		
-		if (persistentConfig.getUser() !=null ) {
-			this.dbUser = persistentConfig.getUser();
-		}
-		if (persistentConfig.getPasswd() != null) {
-			this.dbPasswd = persistentConfig.getPasswd();
-		}
-		if (clusterData != null) {
-			this.clusterData = clusterData;
-		}
-
-		pool = JdbcConnectionPool.create(persistentConfig.getUrl(), dbUser, dbPasswd);
+		dbo = new DataBasePool(persistent);
 	}
 	
-	/**
-	 * 建立数据库
-	 * @param dir
-	 * @param port
-	 * @param user
-	 * @param password
-	 */
-	public DataBase(String clusterData , String dir,String user,String password) {
-		
-		if (dir !=null) {
-			this.basedir = dir;
-		}
-		if (user !=null ) {
-			this.dbUser = user;
-		}
-		if (password != null) {
-			this.dbPasswd = password;
-		}
-		if (clusterData != null) {
-			this.clusterData = clusterData;
-		}
-
-		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
-	}
 	
-
-//	/**
-//	 * 建立数据库
-//	 * @param dir
-//	 * @param port
-//	 * @param user
-//	 * @param password
-//	 */
-//	private DataBase(String dir,String user,String password) {
-//		if (dir !=null) {
-//			this.basedir = dir;
-//		}
-//		if (user !=null ) {
-//			this.dbUser = user;
-//		}
-//		if (password != null) {
-//			this.dbPasswd = password;
-//		}
-//		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
-//	}
-	
-	
-	private JdbcConnectionPool pool;
 
 	/**
 	 * excuteSql
@@ -132,11 +61,11 @@ public final class DataBase {
 		Connection conn = null;
 		Statement createStatement = null;
 		try {
-			conn = pool.getConnection();
+			conn = dbo.getConnection();
 			createStatement = conn.createStatement();
 			createStatement.execute(sql);
 		}catch (Exception ex) {
-			log.error("create Table exception",ex);
+			log.error("exception",ex);
 			throw ex;
 		}finally {
 			try {
@@ -170,7 +99,7 @@ public final class DataBase {
 		
 		JSONArray result = null;
 		try {
-			conn = pool.getConnection();
+			conn = dbo.getConnection();
 			st = conn.createStatement();
 			rs = st.executeQuery(sql);
 			result = getResult(rs,getColumns);
@@ -223,7 +152,7 @@ public final class DataBase {
 	
 	
 	public void close() {
-		pool.dispose();
+		dbo.dispose();
 	}
 	
 	
@@ -236,7 +165,7 @@ public final class DataBase {
 		Connection conn = null;
 		Statement createStatement = null;
 		try {
-			conn = pool.getConnection();
+			conn = dbo.getConnection();
 			createStatement = conn.createStatement();
 			createStatement.execute("DROP TABLE "+tableName);
 		}catch (Exception ex) {
@@ -259,8 +188,6 @@ public final class DataBase {
 			}
 		}
 	}
-
-	
 
 	
 }
