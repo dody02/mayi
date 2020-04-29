@@ -2,9 +2,9 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.sf.dframe.cluster</groupId>
-  <artifactId>net.sf.dframe.cluster</artifactId>
-  <version>0.2-SNAPSHOT</version>
+  <groupId>net.sf.dframe</groupId>
+  <artifactId>mayi</artifactId>
+  <version>0.6</version>
   <packaging>jar</packaging>
 
   <name>net.sf.dframe.cluster</name>
@@ -20,6 +20,10 @@
     <commons-io.version>2.6</commons-io.version>
     <slf4j.version>1.7.30</slf4j.version>
     <logback.version>1.2.3</logback.version>
+    <hikaricp.version>3.4.3</hikaricp.version>
+    <h2.version>1.4.200</h2.version>
+    <mysql.version>5.1.44</mysql.version>
+    <redisson.version>3.12.4</redisson.version>
   </properties>
 
   <dependencies>
@@ -29,6 +33,7 @@
         	<artifactId>hazelcast</artifactId>
         	<version>${hazelcast.version}</version>
     	</dependency>
+    	
     	<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
@@ -62,12 +67,30 @@
             <!-- logback end  -->
             
             <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-<dependency>
-    <groupId>com.h2database</groupId>
-    <artifactId>h2</artifactId>
-    <version>1.4.200</version>
+			<dependency>
+    			<groupId>com.h2database</groupId>
+    			<artifactId>h2</artifactId>
+   				 <version>${h2.version}</version>
+			</dependency>
+     
+     <dependency>
+        <groupId>com.zaxxer</groupId>
+        <artifactId>HikariCP</artifactId>
+        <version>${hikaricp.version}</version>
+    </dependency>
+    
+      <!-- mysql 数据库驱动 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql.version}</version>
+        </dependency>
+        
+        <dependency>
+    <groupId>org.redisson</groupId>
+    <artifactId>redisson</artifactId>
+    <version>${redisson.version}</version>
 </dependency>
-            
 	
     <dependency>
       <groupId>junit</groupId>
@@ -101,7 +124,20 @@
 		</execution>  
 	</executions>  
 </plugin>  
-
+ <!--配置生成源码包-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>3.0.1</version>
+            <executions>
+                <execution>
+                    <id>attach-sources</id>
+                    <goals>
+                        <goal>jar</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
         <!--  
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
