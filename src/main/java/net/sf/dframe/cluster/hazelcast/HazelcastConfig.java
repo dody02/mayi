@@ -12,7 +12,6 @@ import com.hazelcast.config.JoinConfig;
 import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.config.XmlConfigBuilder;
 
-import net.sf.dframe.cluster.hazelcast.h2.DataBase;
 import net.sf.dframe.cluster.pojo.ConfigMessage;
 
 /**
@@ -38,34 +37,10 @@ public class HazelcastConfig {
 			log.info("use default config file:"+url);
 		}
 		String cfgContent = FileUtils.readFileToString(new File(url),"utf8");
-		cm = JSONObject.parseObject(cfgContent,ConfigMessage.class);
-		Config config = new Config();
-		NetworkConfig network = config.getNetworkConfig();
-		if (cm.getPort() != 0) {
-			network.setPort(cm.getPort());
-			network.setPortAutoIncrement(false);
-		} else {
-			network.setPortAutoIncrement(true);
-		}
-		
-		JoinConfig join = network.getJoin();
-		if (cm.getMulticast() != null ) { //使用多播
-			if (cm.getMulticast().getGroup() == null || cm.getMulticast().getGroup().isEmpty()) {
-				throw new Exception ("could not found multicast group config value!");
-			} else {
-				join.getMulticastConfig().setEnabled(true);
-				join.getMulticastConfig().setMulticastGroup(cm.getMulticast().getGroup());
-				join.getMulticastConfig().setMulticastPort(cm.getMulticast().getPort());
-			} 
-		} else 	if (cm.getMembers()!= null && cm.getMembers().size() > 0) { //使用ip表
-			join.getMulticastConfig().setEnabled(false);
-			join.getTcpIpConfig().setMembers(cm.getMembers()).setEnabled(true);
-		}
-		
-		
-		config.setInstanceName(cm.getName());
+		Config config = readJSONConfig(cfgContent);
 		return config;
 	}
+
 	
 	/**
 	 * 读取配置文件异常
@@ -95,5 +70,40 @@ public class HazelcastConfig {
 	public ConfigMessage getCm() {
 		return cm;
 	}
-	
+
+	/**
+	 * 读取JSON配置文件
+	 * @param cfgContent
+	 * @return
+	 * @throws Exception
+	 */
+	public Config readJSONConfig(String cfgContent) throws Exception {
+		cm = JSONObject.parseObject(cfgContent,ConfigMessage.class);
+		Config config = new Config();
+		NetworkConfig network = config.getNetworkConfig();
+		if (cm.getPort() != 0) {
+			network.setPort(cm.getPort());
+			network.setPortAutoIncrement(false);
+		} else {
+			network.setPortAutoIncrement(true);
+		}
+		
+		JoinConfig join = network.getJoin();
+		if (cm.getMulticast() != null ) { //使用多播
+			if (cm.getMulticast().getGroup() == null || cm.getMulticast().getGroup().isEmpty()) {
+				throw new Exception ("could not found multicast group config value!");
+			} else {
+				join.getMulticastConfig().setEnabled(true);
+				join.getMulticastConfig().setMulticastGroup(cm.getMulticast().getGroup());
+				join.getMulticastConfig().setMulticastPort(cm.getMulticast().getPort());
+			} 
+		} else 	if (cm.getMembers()!= null && cm.getMembers().size() > 0) { //使用ip表
+			join.getMulticastConfig().setEnabled(false);
+			join.getTcpIpConfig().setMembers(cm.getMembers()).setEnabled(true);
+		}
+		
+		
+		config.setInstanceName(cm.getName());
+		return config;
+	}
 }

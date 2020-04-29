@@ -1,5 +1,9 @@
 package net.sf.dframe.cluster.hazelcast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +34,27 @@ public class HazelcastClusterCreater {
 	private Config cfg;
 
 	private IPersistent persistent = null;
+	
+	private final String UTF8 = "utf-8";
+	/**
+	 * 
+	 * @param is
+	 * @return
+	 * @throws Exception 
+	 */
+	public ICluster getCluster (InputStream is) throws Exception {
+		ICluster result = null;
+		String configString = this.readInputStream(is, UTF8);	
+		cfg = config.readJSONConfig(configString);
+		try{
+			is.close();		
+		} catch (Exception e) {
+			log.warn("close InputStream Exception",e);;
+		}
+		result = createrClusterInstance();
+		return result;
+	}
+	
 	/**
 	 *  构建Cluster
 	 * @param url
@@ -52,6 +77,17 @@ public class HazelcastClusterCreater {
 				log.info("create cluster by json file "+ url);
 			}
 		}
+		result = createrClusterInstance();
+		
+		return result;
+	}
+
+	/**
+	 * 构建实例
+	 * @return
+	 */
+	private ICluster createrClusterInstance() {
+		ICluster result;
 		//persistent setting
 		if (config.getCm().getPersistent() != null) {
 			Persistent persistentConfig = config.getCm().getPersistent();
@@ -104,8 +140,29 @@ public class HazelcastClusterCreater {
 			}
 			
 		}
-		
 		return result;
+	}
+	
+	
+	/**
+	 *  读取配置
+	 * @param in
+	 * @param charset
+	 * @return
+	 * @throws Exception
+	 */
+	 private String readInputStream(InputStream in, String charset) throws Exception {
+		  if (charset == null) {
+			charset = UTF8;
+		}
+	      byte[] buf = new byte[1024];
+	      StringBuffer sb = new StringBuffer();
+	      int len = 0;
+          while ((len=in.read(buf)) != -1) {
+              sb.append(new String(buf,0,len, charset));
+              
+          }
+	      return sb.toString();
 	}
 	
 }
