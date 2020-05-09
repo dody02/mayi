@@ -51,7 +51,7 @@ public class HazelcastPersistentCluster extends HazelcastShardingCluster impleme
 		
 		MapStoreConfig mapStoreConfig = new MapStoreConfig();
 		mapStoreConfig.setEnabled(true);
-		mapStoreConfig.setWriteDelaySeconds(1);
+		mapStoreConfig.setWriteDelaySeconds(0);
 		mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
 		MapStore<?, ?>  store = persistent.getMapStore(name);
 		mapStoreConfig.setImplementation(store);
