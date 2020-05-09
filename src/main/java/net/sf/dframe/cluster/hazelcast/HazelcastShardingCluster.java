@@ -5,6 +5,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 import net.sf.dframe.cluster.ICluster;
+import net.sf.dframe.cluster.IMListener;
 
 /**
  * 
@@ -15,8 +16,11 @@ public class HazelcastShardingCluster implements  ICluster {
 
 	protected HazelcastInstance hz;
 	
+	protected MemberListenerAdeptor listenerAdeptor;
+	
 	public HazelcastShardingCluster(Config cfg) {
 		hz = Hazelcast.getOrCreateHazelcastInstance(cfg);
+		hz.getCluster().addMembershipListener(listenerAdeptor );
 	}
 
 
@@ -30,4 +34,14 @@ public class HazelcastShardingCluster implements  ICluster {
 		hz.shutdown();
 	}
 
+
+	@Override
+	public void setClusterMemberListener(IMListener listener) {
+		getListener().setListener(listener);
+	}
+
+	public MemberListenerAdeptor getListener() {
+		return listenerAdeptor;
+	}
+	
 }

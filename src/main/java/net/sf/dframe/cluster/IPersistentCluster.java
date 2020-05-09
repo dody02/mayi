@@ -15,4 +15,5 @@ public interface IPersistentCluster extends ICluster{
 	
 	public IPersistent getPersistent();
 	
+	
 }

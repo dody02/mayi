@@ -4,7 +4,7 @@
 
   <groupId>net.sf.dframe</groupId>
   <artifactId>mayi</artifactId>
-  <version>0.7</version>
+  <version>0.9</version>
   <packaging>jar</packaging>
 
   <name>net.sf.dframe.cluster</name>

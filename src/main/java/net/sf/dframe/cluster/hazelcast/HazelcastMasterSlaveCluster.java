@@ -110,7 +110,7 @@ public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster implem
 	public IMap<?,?> getH2Map(String name){
 		MapStoreConfig mapStoreConfig = new MapStoreConfig();
 		mapStoreConfig.setEnabled(true);
-		mapStoreConfig.setWriteDelaySeconds(0);
+		mapStoreConfig.setWriteDelaySeconds(1);
 		MapStore<String, String>  store = new H2MapStore(db);
 		mapStoreConfig.setImplementation(store);
 		hz.getConfig().getMapConfig(name).setMapStoreConfig(mapStoreConfig);

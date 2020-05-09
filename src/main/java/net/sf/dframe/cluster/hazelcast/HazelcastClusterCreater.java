@@ -45,6 +45,7 @@ public class HazelcastClusterCreater {
 	public ICluster getCluster (InputStream is) throws Exception {
 		ICluster result = null;
 		String configString = this.readInputStream(is, UTF8);	
+		log.info("JSONConfig:"+configString);
 		cfg = config.readJSONConfig(configString);
 		try{
 			is.close();		

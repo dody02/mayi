@@ -22,7 +22,7 @@ public class HazelcastPersistentCluster extends HazelcastShardingCluster impleme
 
 	private IPersistent persistent ;
 	
-	private MapListener listener = null;
+	private MapListener mapListener = null;
 	
 	
 	public HazelcastPersistentCluster(Config cfg,IPersistent persistent) {
@@ -51,14 +51,15 @@ public class HazelcastPersistentCluster extends HazelcastShardingCluster impleme
 		
 		MapStoreConfig mapStoreConfig = new MapStoreConfig();
 		mapStoreConfig.setEnabled(true);
-		mapStoreConfig.setWriteDelaySeconds(0);
+		mapStoreConfig.setWriteDelaySeconds(1);
+		mapStoreConfig.setInitialLoadMode(MapStoreConfig.InitialLoadMode.EAGER);
 		MapStore<?, ?>  store = persistent.getMapStore(name);
 		mapStoreConfig.setImplementation(store);
 		hz.getConfig().getMapConfig(name).setMapStoreConfig(mapStoreConfig);
 		
 		IMap<?, ?>  map =  hz.getMap(name);
-		if (listener != null) {
-			map.addEntryListener(listener, true);
+		if (mapListener != null) {
+			map.addEntryListener(mapListener, true);
 		}
 		
 		return map;
@@ -75,13 +76,16 @@ public class HazelcastPersistentCluster extends HazelcastShardingCluster impleme
 	}
 
 
-	public MapListener getListener() {
-		return listener;
+	public MapListener getMapListener() {
+		return mapListener;
 	}
 
-
-	public void setListener(MapListener listener) {
-		this.listener = listener;
+	/**
+	 * Must set MapListener before invoke getPersistentMap
+	 * @param listener
+	 */
+	public void setMapListener(MapListener listener) {
+		this.mapListener = listener;
 	}
 
 }

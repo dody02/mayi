@@ -37,6 +37,7 @@ public class HazelcastConfig {
 			log.info("use default config file:"+url);
 		}
 		String cfgContent = FileUtils.readFileToString(new File(url),"utf8");
+		log.info("JSONConfig:"+cfgContent);
 		Config config = readJSONConfig(cfgContent);
 		return config;
 	}

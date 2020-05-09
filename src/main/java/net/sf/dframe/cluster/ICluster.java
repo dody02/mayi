@@ -8,4 +8,5 @@ package net.sf.dframe.cluster;
  */
 public interface ICluster {
 	public void shutdown();
+	public void setClusterMemberListener(IMListener listener);
 }
