@@ -16,7 +16,7 @@ public class HazelcastShardingCluster implements  ICluster {
 
 	protected HazelcastInstance hz;
 	
-	protected MemberListenerAdeptor listenerAdeptor;
+	protected MemberListenerAdeptor listenerAdeptor = new MemberListenerAdeptor();
 	
 	public HazelcastShardingCluster(Config cfg) {
 		hz = Hazelcast.getOrCreateHazelcastInstance(cfg);
