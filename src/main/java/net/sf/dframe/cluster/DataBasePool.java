@@ -44,6 +44,8 @@ public class DataBasePool implements IConnectionPool {
 		config.setConnectionTimeout(persistent.getTimeout());
 		config.setMaximumPoolSize(persistent.getPoolsize());
 		config.setMinimumIdle(persistent.getIdle());
+		config.setMaxLifetime(0);
+		config.setIdleTimeout(persistent.getTimeout());
 		if (persistent.getClassdriver() != null && !persistent.getClassdriver().isEmpty()) {
 			config.setDriverClassName(persistent.getClassdriver());
 		}

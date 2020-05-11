@@ -12,11 +12,11 @@ public class Persistent {
 	
 	private String passwd;
 	
-	private int poolsize = 20;
+	private int poolsize = 50;
 
-	private int idle = 2;
+	private int idle = 20;
 	
-	private long timeout = 10000;
+	private long timeout = 60000;
 	
 	private boolean autoCommit = true;
 	
