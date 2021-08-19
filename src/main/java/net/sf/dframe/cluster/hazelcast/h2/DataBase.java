@@ -73,7 +73,15 @@ public final class DataBase {
 
 		pool = JdbcConnectionPool.create(persistentConfig.getUrl(), dbUser, dbPasswd);
 	}
-	
+
+	/**
+	 * 简单构建
+	 * @param clusterData
+	 */
+	public DataBase (String clusterData){
+		pool = JdbcConnectionPool.create("jdbc:h2:" + this.basedir + clusterData, dbUser, dbPasswd);
+	}
+
 	/**
 	 * 建立数据库
 	 * @param dir
