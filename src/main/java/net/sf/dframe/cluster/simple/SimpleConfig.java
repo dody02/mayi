@@ -10,12 +10,40 @@ import com.hazelcast.config.NetworkConfig;
 public class SimpleConfig {
 
     private Config config ;
+    private String clusterName;
 
+    /**
+     * 默认配置
+     * 默认的集群名称，默认的网络配置
+     */
     SimpleConfig (){
         this("default",new NetworkCfg());
     }
+
+    /**
+     * 构建简单配置
+     * @param clusterName 集群名
+     */
+    SimpleConfig(String clusterName){
+        this(clusterName,new NetworkCfg());
+    }
+
+    /**
+     * 集群配置
+     * @param clusterName 集群名称
+     * @param cfg 集群网络配置，包括多播与指定IP序列
+     */
     SimpleConfig (String clusterName,NetworkCfg cfg){
         config = initCfg(clusterName,cfg);
+        this.clusterName = clusterName;
+    }
+
+    public String getClusterName() {
+        return clusterName;
+    }
+
+    public void setClusterName(String clusterName) {
+        this.clusterName = clusterName;
     }
 
     public Config getConfig(){

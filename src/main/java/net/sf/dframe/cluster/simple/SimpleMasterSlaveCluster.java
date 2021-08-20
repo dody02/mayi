@@ -25,21 +25,52 @@ public class SimpleMasterSlaveCluster {
 
     private SimpleConfig config;
 
+    /**
+     * 构建主从集群
+     * @param listener 集群监听器
+     */
     public SimpleMasterSlaveCluster(IMListener listener){
-        this("defaultMasterSlaveCluster",new SimpleConfig(),listener);
+        this(new SimpleConfig(),listener);
     }
 
+    /**
+     * 构建主从集群
+     */
     public SimpleMasterSlaveCluster(){
-        this("defaultMasterSlaveCluster",new SimpleConfig());
+        this(new SimpleConfig());
+    }
+    /**
+     * 构建主从集群
+     * @param clusterName 集群名称
+     */
+    public SimpleMasterSlaveCluster(String clusterName,IMListener listener){
+        this(new SimpleConfig(clusterName),listener);
     }
 
-    public SimpleMasterSlaveCluster(String clusterName, SimpleConfig config){
-        DataBase db = DataBase.getInstance(clusterName,basedir, dbUser, dbPasswd);
+    /**
+     * 构建主从集群
+     * @param clusterName 集群名称
+     */
+    public SimpleMasterSlaveCluster(String clusterName){
+        this(new SimpleConfig(clusterName));
+    }
+
+    /**
+     * 构建主从集群
+     * @param config 集群配置
+     */
+    public SimpleMasterSlaveCluster( SimpleConfig config){
+        DataBase db = DataBase.getInstance(config.getClusterName(),basedir, dbUser, dbPasswd);
         hazelcastMasterSlaveCluster = new HazelcastMasterSlaveCluster(config.getConfig(),db);
     }
 
-    public SimpleMasterSlaveCluster(String clusterName, SimpleConfig config, IMListener listener){
-        DataBase db = DataBase.getInstance(clusterName,basedir, dbUser, dbPasswd);
+    /**
+     * 构建一个简单主从集群
+     * @param config 集群配置
+     * @param listener 集群监听器
+     */
+    public SimpleMasterSlaveCluster(SimpleConfig config, IMListener listener){
+        DataBase db = DataBase.getInstance(config.getClusterName(),basedir, dbUser, dbPasswd);
         hazelcastMasterSlaveCluster = new HazelcastMasterSlaveCluster(config.getConfig(),db);
         hazelcastMasterSlaveCluster.setClusterMemberListener(listener);
     }

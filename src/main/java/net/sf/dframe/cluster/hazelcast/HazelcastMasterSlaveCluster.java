@@ -43,8 +43,12 @@ public class HazelcastMasterSlaveCluster extends HazelcastShardingCluster implem
 	private DataBase db = null;
 	
 	private IPersistent persistent;
-	
-	
+
+	/**
+	 *
+	 * @param cfg
+	 * @param db
+	 */
 	public HazelcastMasterSlaveCluster(Config cfg,DataBase db) {
 		super(cfg);
 		this.db = db;
