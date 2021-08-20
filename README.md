@@ -1,6 +1,7 @@
 # mayi
 可快速建立应用集群服务，支持快速集群，主从集群。
 可以通过config.json文件配置，建集群；也支持代码快速建立集群。
+集群名称相同的应用，则自动组成集群，可以在集群之间通讯和共享数据。
 # 快速使用
 
 public class Test implements IMListener {
@@ -39,7 +40,7 @@ public class Test implements IMListener {
 # 每种集群都可以通过默认配置构建或者指定配置信息构建，如：
 /**
      * 构建一个简单主从集群
-     * @param clusterName 集群名，集群名称相同的应用，则自动组成集群，可以在集群之间通讯和共享数据
+     * @param clusterName 集群名
      * @param config 集群配置
      * @param listener 集群监听器
      */
