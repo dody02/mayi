@@ -22,7 +22,7 @@
     <logback.version>1.2.3</logback.version>
     <hikaricp.version>3.4.3</hikaricp.version>
     <h2.version>1.4.200</h2.version>
-    <mysql.version>5.1.44</mysql.version>
+    <mysql.version>8.0.28</mysql.version>
     <redisson.version>3.12.4</redisson.version>
   </properties>
 
