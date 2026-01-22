@@ -7,6 +7,14 @@ package net.sf.dframe.cluster;
  *
  */
 public interface ICluster {
+	/**
+	 * shutdown
+	 */
 	public void shutdown();
+
+	/**
+	 * setClusterMemberListener
+	 * @param listener
+	 */
 	public void setClusterMemberListener(IMListener listener);
 }

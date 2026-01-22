@@ -10,7 +10,7 @@ import net.sf.dframe.cluster.hazelcast.h2.ArributesMapH2Store;
 import net.sf.dframe.cluster.hazelcast.h2.DataBase;
 
 /**
- * 
+ * 监听器
  * @author dy02
  *
  */

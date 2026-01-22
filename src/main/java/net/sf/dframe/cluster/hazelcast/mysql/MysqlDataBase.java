@@ -92,7 +92,7 @@ public final class MysqlDataBase {
 	 * @return
 	 * @throws SQLException
 	 */
-	public JSONArray query(String sql,List<String> getColumns) throws SQLException {
+	public JSONArray query(String sql,List<String> getColumns) throws Exception {
 		Connection conn = null;
 		Statement st = null;
 		ResultSet rs = null;

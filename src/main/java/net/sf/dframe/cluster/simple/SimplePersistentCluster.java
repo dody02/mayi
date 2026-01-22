@@ -52,23 +52,43 @@ public class SimplePersistentCluster {
         hpc.setClusterMemberListener(listener);
     }
 
-
+    /**
+     * getPersistentQueue
+     * @param name
+     * @return IQueue
+     */
     public IQueue<?> getPersistentQueue(String name){
         return hpc.getPersistentQueue(name);
     }
 
+    /**
+     * getPersistentMap
+     * @param name
+     * @return IMap
+     */
     public IMap<?, ?> getPersistentMap(String name){
         return hpc.getPersistentMap(name);
     }
 
+    /**
+     * getPersistent
+     * @return IPersistent
+     */
     public IPersistent getPersistent(){
         return hpc.getPersistent();
     }
 
+    /**
+     * setPersistent
+     * @param persistent
+     */
     public void setPersistent(IPersistent persistent){
         hpc.setPersistent(persistent);
     }
 
+    /**
+     * shudown
+     */
     public void shutdown(){
         hpc.shutdown();
     }

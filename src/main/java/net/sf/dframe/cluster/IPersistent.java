@@ -9,10 +9,19 @@ import com.hazelcast.map.MapStore;
  *
  */
 public interface IPersistent {
-	
 
+	/**
+	 * getMapStore
+	 * @param name
+	 * @return MapStore
+	 */
 	public MapStore<?, ?> getMapStore(String name);
 
+	/**
+	 * getQueueStore
+	 * @param name
+	 * @return QueueStore
+	 */
 	public QueueStore<?> getQueueStore(String name);
 	
 	

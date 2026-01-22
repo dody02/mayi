@@ -120,7 +120,7 @@ public class MysqlQueueStore implements QueueStore<String>{
 			if (!result.isEmpty()) {
 				value = result.getJSONObject(0).getString(VALUE_LABEL);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			log.error("load data for "+key +" error ",e);
 		}
@@ -166,7 +166,7 @@ public class MysqlQueueStore implements QueueStore<String>{
 			for (int i = 0 ; i < result.size(); i ++) {
 				set.add(result.getJSONObject(i).getLong(this.KEY_LABEL));
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("load ALL keys exception ",e);
 		}
 		return set;

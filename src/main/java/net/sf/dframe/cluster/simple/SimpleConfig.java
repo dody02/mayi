@@ -38,21 +38,33 @@ public class SimpleConfig {
         this.clusterName = clusterName;
     }
 
+    /**
+     * getClusterName
+     * @return clusterName
+     */
     public String getClusterName() {
         return clusterName;
     }
 
+    /**
+     * setClusterName
+     * @param clusterName
+     */
     public void setClusterName(String clusterName) {
         this.clusterName = clusterName;
     }
 
+    /**
+     * getConfig
+     * @return config
+     */
     public Config getConfig(){
         return config;
     }
 
     /**
      * 初始化
-     * @return
+     * @return Config
      */
     private  Config initCfg(String clusterName, NetworkCfg cfg){
         Config config = new Config();

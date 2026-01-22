@@ -6,6 +6,11 @@ package net.sf.dframe.cluster;
  *
  */
 public interface ClusterCreater {
-	
+	/**
+	 * get cluster
+	 * @param url
+	 * @return ICluster
+	 * @throws Exception
+	 */
 	public ICluster getCluster(String url) throws Exception;
 }

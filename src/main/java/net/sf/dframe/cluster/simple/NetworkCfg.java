@@ -67,16 +67,34 @@ public class NetworkCfg  {
         this("224.2.2.3",54327);
     }
 
+    /**
+     * getgroup
+     * @return  String
+     */
     public String getGroup(){
         return this.group;
     }
+
+    /**
+     * getPort
+     * @return port
+     */
     public int getPort(){
         return this.port;
     }
+
+    /**
+     * getMembers
+     * @return members
+     */
     public ArrayList<String> getMembers(){
         return this.members;
     }
 
+    /**
+     * getNet
+     * @return net
+     */
     public ClusterNet getNet() {
         return net;
     }

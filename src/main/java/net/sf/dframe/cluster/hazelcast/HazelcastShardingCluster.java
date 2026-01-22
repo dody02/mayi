@@ -8,7 +8,7 @@ import net.sf.dframe.cluster.ICluster;
 import net.sf.dframe.cluster.IMListener;
 
 /**
- * 
+ * 集群
  * @author dy02
  *
  */

@@ -17,6 +17,9 @@ import com.alibaba.fastjson.JSONObject;
 
 import net.sf.dframe.cluster.pojo.Persistent;
 
+/**
+ * H2 Database
+ */
 public final class DataBase {
 
 	private static Logger log = LoggerFactory.getLogger(DataBase.class);

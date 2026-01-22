@@ -14,7 +14,7 @@ import net.sf.dframe.cluster.IPersistent;
 import net.sf.dframe.cluster.IPersistentCluster;
 
 /**
- * 
+ * 持久化集群
  * @author dy02
  *
  */

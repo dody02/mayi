@@ -8,7 +8,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 import net.sf.dframe.cluster.pojo.Persistent;
 /**
- * 
+ * 基础连接池
  * @author dy02
  *
  */
@@ -28,13 +28,19 @@ public class DataBasePool implements IConnectionPool {
 	private Persistent persistent;
 	
 	private HikariDataSource ds ;
-	
-	
+
+	/**
+	 * DataBasePool
+	 * @param persistent
+	 */
 	public DataBasePool (Persistent persistent) {
 		this.persistent = persistent;
 		init();
 	}
-	
+
+	/**
+	 * init
+	 */
 	private void init() {
 		HikariConfig config = new HikariConfig();
 		config.setJdbcUrl(persistent.getUrl());
@@ -65,8 +71,8 @@ public class DataBasePool implements IConnectionPool {
 
 	
 	/**
-	 * 
-	 * @return
+	 * getConnection
+	 * @return Connection
 	 * @throws SQLException 
 	 */
 	public Connection getConnection() throws SQLException {
@@ -75,7 +81,7 @@ public class DataBasePool implements IConnectionPool {
 	}
 
 	/**
-	 * 
+	 * dispose
 	 */
 	public void dispose() {
 		ds.close();

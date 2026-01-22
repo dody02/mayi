@@ -14,7 +14,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.hazelcast.map.MapStore;
 
 /**
- * 
+ * ArributesMap
  * @author dy02
  *
  */

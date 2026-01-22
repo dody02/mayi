@@ -77,7 +77,7 @@ public class SimpleMasterSlaveCluster {
 
     /**
      * 获取持久化的属性
-     * @return
+     * @return IMap
      */
     public IMap<String,String> getArributesMap(){
         return  hazelcastMasterSlaveCluster.getArributesMap();
@@ -91,7 +91,7 @@ public class SimpleMasterSlaveCluster {
 
     /**
      * 本机是否是活动的成员
-     * @return
+     * @return boolean
      */
     public boolean isMeActive() {
         return hazelcastMasterSlaveCluster.isMeActive();
@@ -99,7 +99,7 @@ public class SimpleMasterSlaveCluster {
 
     /**
      * 获取集群中活动的节点
-     * @return
+     * @return String
      */
     public String getActive() {
         return hazelcastMasterSlaveCluster.getActive();
@@ -108,7 +108,7 @@ public class SimpleMasterSlaveCluster {
     /**
      * 获取持久化的队列存储
      * @param name
-     * @return
+     * @return IQueue
      */
     public IQueue<?> getPersistentQueue(String name){
         return hazelcastMasterSlaveCluster.getPersistentQueue(name);
@@ -116,7 +116,7 @@ public class SimpleMasterSlaveCluster {
     /**
      * 获取持久化的map存储
      * @param name
-     * @return
+     * @return IMap
      */
     public IMap<?, ?> getPersistentMap(String name){
         return hazelcastMasterSlaveCluster.getPersistentMap(name);
@@ -133,20 +133,31 @@ public class SimpleMasterSlaveCluster {
     /**
      * 获取集群队列存储
      * @param name
-     * @return
+     * @return IQueue
      */
     public IQueue<?> getQueue(String name){
         return hazelcastMasterSlaveCluster.getQueue(name);
     }
 
-
+    /**
+     * shutdown
+     */
     public void shutdown(){
         hazelcastMasterSlaveCluster.shutdown();
     }
+
+    /**
+     * getHz
+     * @return HazelcastInstance
+     */
     public HazelcastInstance getHz(){
         return hazelcastMasterSlaveCluster.getHz();
     }
 
+    /**
+     * setClusterMemberListener
+     * @param listener
+     */
     public void setClusterMemberListener (IMListener listener){
         hazelcastMasterSlaveCluster.setClusterMemberListener(listener);
     }

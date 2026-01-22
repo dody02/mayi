@@ -2,28 +2,61 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>net.sf.dframe</groupId>
+  <groupId>site.edody.dframe</groupId>
   <artifactId>mayi</artifactId>
   <version>1.2</version>
   <packaging>jar</packaging>
 
-  <name>net.sf.dframe.cluster</name>
-  <url>http://maven.apache.org</url>
+  <name>mayi</name>
+  <description>mysql binglog process </description>
+  <url>https://github.com/dody02/mayi.git</url>
 
-  <properties>
+    <developers>
+        <developer>
+            <id>dody</id>
+            <name>Dody</name>
+            <roles>
+                <role>Project Manager</role>
+                <role>Developer</role>
+            </roles>
+            <email>dy0222@163.com</email>
+            <url>https://gitee.com/dody</url>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>Github</system>
+        <url>https://github.com/dody02/mayi/issues</url>
+    </issueManagement>
+    <inceptionYear>2025</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://spdx.org/licenses/MIT.html</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git://github.com/dody02/mayi.git</connection>
+        <developerConnection>scm:git:git://github.com/dody02/mayi.git</developerConnection>
+        <url>github.com/dody02/mayi.git</url>
+        <tag>master</tag>
+    </scm>
+
+
+    <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <java.version>1.8</java.version>
-    <hazelcast.version>4.0</hazelcast.version>
-    <fastjson.version>1.2.66</fastjson.version>
-    <commons-io.version>2.6</commons-io.version>
-    <slf4j.version>1.7.30</slf4j.version>
-    <logback.version>1.2.3</logback.version>
-    <hikaricp.version>3.4.3</hikaricp.version>
-    <h2.version>1.4.200</h2.version>
-    <mysql.version>5.1.44</mysql.version>
-    <redisson.version>3.12.4</redisson.version>
+    <java.version>21</java.version>
+    <hazelcast.version>5.6.0</hazelcast.version>
+    <fastjson.version>2.0.60</fastjson.version>
+    <commons-io.version>2.21.0</commons-io.version>
+    <slf4j.version>2.0.17</slf4j.version>
+    <logback.version>1.5.24</logback.version>
+    <hikaricp.version>7.0.2</hikaricp.version>
+    <h2.version>2.4.240</h2.version>
+    <mysql.version>8.4.0</mysql.version>
+    <redisson.version>4.1.0</redisson.version>
   </properties>
 
   <dependencies>
@@ -81,8 +114,8 @@
     
       <!-- mysql 数据库驱动 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.version}</version>
         </dependency>
         
@@ -102,28 +135,29 @@
   
   <build>
         <plugins>
-        <plugin>  
-	<artifactId>maven-assembly-plugin</artifactId>  
-	<configuration>  
-		<descriptorRefs>  
-			<descriptorRef>jar-with-dependencies</descriptorRef>  
-		</descriptorRefs>  
-		<archive>  
-			<manifest>  
-				<mainClass></mainClass>  
-			</manifest>  
-		</archive>  
-	</configuration>  
-	<executions>  
-		<execution>  
-			<id>make-assembly</id>  
-			<phase>package</phase>  
-			<goals>  
-				<goal>single</goal>  
-			</goals>  
-		</execution>  
-	</executions>  
-</plugin>  
+            <!-- 生成带依赖打包成一个jar -->
+<!--        <plugin>  -->
+<!--	<artifactId>maven-assembly-plugin</artifactId>  -->
+<!--	<configuration>  -->
+<!--		<descriptorRefs>  -->
+<!--			<descriptorRef>jar-with-dependencies</descriptorRef>  -->
+<!--		</descriptorRefs>  -->
+<!--		<archive>  -->
+<!--			<manifest>  -->
+<!--				<mainClass></mainClass>  -->
+<!--			</manifest>  -->
+<!--		</archive>  -->
+<!--	</configuration>  -->
+<!--	<executions>  -->
+<!--		<execution>  -->
+<!--			<id>make-assembly</id>  -->
+<!--			<phase>package</phase>  -->
+<!--			<goals>  -->
+<!--				<goal>single</goal>  -->
+<!--			</goals>  -->
+<!--		</execution>  -->
+<!--	</executions>  -->
+<!--</plugin>  -->
  <!--配置生成源码包-->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -138,20 +172,148 @@
                 </execution>
             </executions>
         </plugin>
-        <!-- end 配置生成源码包 -->
-          <!-- 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludeResources>true</excludeResources>
+                    <useDefaultExcludes>true</useDefaultExcludes>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+<!--                <configuration>-->
+<!--                    <source>6</source>-->
+<!--                    <target>6</target>-->
+<!--                </configuration>-->
+            </plugin>
+
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.10.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <javadocExecutable>D:/jdk-21/jdk-21.0.3/bin/javadoc</javadocExecutable>
+                    <additionalJOption>-Xdoclint:none</additionalJOption>
+                    <source>17</source>
+                    <!--							<target>17</target>-->
                 </configuration>
             </plugin>
-             -->
-             
+            <!-- GPG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <configuration>
+                    <!-- 改成你自己的路径 -->
+                    <executable>C:\Program Files (x86)\gnupg\bin\gpg.exe</executable>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.8.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <!-- 这里的serverId是之前在settings.xml中配置的 -->
+                    <publishingServerId>central</publishingServerId>
+                    <tokenAuth>true</tokenAuth>
+                    <autoPublish>true</autoPublish>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
-    
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- Javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.10.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <javadocExecutable>D:/jdk-21/jdk-21.0.3/bin/javadoc</javadocExecutable>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <source>17</source>
+                            <!--							<target>17</target>-->
+                        </configuration>
+                    </plugin>
+                    <!-- GPG -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <configuration>
+                            <!-- 改成你自己的路径 -->
+                            <executable>C:\Program Files (x86)\gnupg\bin\gpg.exe</executable>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.8.0</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- 这里的serverId是之前在settings.xml中配置的 -->
+                            <publishingServerId>central</publishingServerId>
+                            <tokenAuth>true</tokenAuth>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+
+
+
+                </plugins>
+            </build>
+        </profile>
+
+    </profiles>
 </project>

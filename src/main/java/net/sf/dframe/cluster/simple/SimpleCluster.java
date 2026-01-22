@@ -61,10 +61,17 @@ public class SimpleCluster {
         hsc.setClusterMemberListener(listener);
     }
 
+    /**
+     * getHz
+     * @return HazelcastInstance
+     */
     public HazelcastInstance getHz(){
         return hsc.getHz();
     }
 
+    /**
+     * shutdown
+     */
     public void shutdown(){
         hsc.shutdown();
     }

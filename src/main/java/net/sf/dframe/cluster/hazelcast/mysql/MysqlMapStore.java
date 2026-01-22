@@ -73,7 +73,7 @@ public class MysqlMapStore implements MapStore<String, String>  {
 			if (!result.isEmpty()) {
 				value = result.getJSONObject(0).getString(VALUE_LABEL);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("load data for "+key +" error ",e);
 		}
 		return value;
@@ -99,7 +99,7 @@ public class MysqlMapStore implements MapStore<String, String>  {
 			for (int i = 0 ; i < result.size(); i ++) {
 				set.add(result.getJSONObject(i).getString(this.KEY_LABEL));
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			log.error("load ALL keys exception ",e);
 		}
 		return set;

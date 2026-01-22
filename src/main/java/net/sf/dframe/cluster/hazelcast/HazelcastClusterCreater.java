@@ -21,7 +21,7 @@ import net.sf.dframe.cluster.hazelcast.redis.RedisPersistent;
 import net.sf.dframe.cluster.pojo.Persistent;
 
 /**
- * 
+ * 构建器
  * @author dy02
  *
  */

@@ -47,7 +47,6 @@ public class RedisMapStore implements MapStore<String, String>  {
 	/**
 	 * set the name
 	 * @param db
-	 * @param name
 	 */
 	public RedisMapStore (RedissonClient db) {
 		this(db,null);
@@ -76,7 +75,7 @@ public class RedisMapStore implements MapStore<String, String>  {
 	@Override
 	public Iterable<String> loadAllKeys() {
 		try {
-			Set<String> keyset = map.keySet();
+			final Set<String> keyset = map.keySet();
 			
 			return new Iterable<String>() {
 
