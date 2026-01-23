@@ -35,7 +35,7 @@ public class HazelcastArributesMapListener extends EntryAdapter<String, String> 
 	public void initTable() {
 		String initSql = null;
 		initSql = "CREATE TABLE IF NOT EXISTS  " + ArributesMapH2Store.TableName + " (" + ArributesMapH2Store.KEY_LABEL + " VARCHAR(1000) PRIMARY KEY ,"
-				+ ArributesMapH2Store.VALUE_LABEL + " VARCHAR(1000))";
+				+ "\"" + ArributesMapH2Store.VALUE_LABEL + "\" VARCHAR(1000))";
 //		columns = new ArrayList<String>();
 //		columns.add(ArributestMapH2Store.KEY_LABEL);
 //		columns.add(ArributestMapH2Store.VALUE_LABEL);

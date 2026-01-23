@@ -43,7 +43,7 @@ private static Logger log = LoggerFactory.getLogger(H2MapStore.class);
 		columns.add(KEY_LABEL);
 		columns.add(VALUE_LABEL);
 		try {
-			db.executeSql("CREATE TABLE IF NOT EXISTS "+TableName+" ("+KEY_LABEL+"  VARCHAR(500) PRIMARY KEY ,"+VALUE_LABEL+" VARCHAR(1000))");
+			db.executeSql("CREATE TABLE IF NOT EXISTS "+TableName+" ("+KEY_LABEL+"  VARCHAR(500) PRIMARY KEY ,\""+VALUE_LABEL+"\" VARCHAR(1000))");
 		} catch (Exception e) {
 			log.error("create Queue Store Table Exception");
 		}
